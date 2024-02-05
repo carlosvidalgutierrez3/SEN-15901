@@ -33,8 +33,7 @@ void SEN15901::begin(){
   attachInterrupt(digitalPinToInterrupt(rain_pin), spoonTip, RISING);
 }
 
-float SEN15901::get_wind_speed(){
-  float wind_speed = 0;
+uint8_t SEN15901::get_wind_speed(){
   float t0 = millis();
   bool previous = digitalRead(anemometer_pin);   // read the input pin
   bool current{0};
@@ -48,71 +47,70 @@ float SEN15901::get_wind_speed(){
       count++;
     }
   }
-  wind_speed = (float)count/2.0*2.4/RECORD_TIME_WIND_SPEED; // count/2 because it counts rising and falling, and we only want one. 2.4kmh per tic per second
-  return wind_speed;
+  return count;
 }
 
-uint16_t SEN15901::get_wind_direction(){
+uint8_t SEN15901::get_wind_direction(){
   uint16_t sensorValue = analogRead(vane_pin);
   float voltage = sensorValue*3.3/4096;
   long resistance = vane_resistor/((3.3/voltage) - 1);
-  uint16_t direction = mapping(resistance);
+  uint8_t direction = mapping(resistance);
 
-  return (uint16_t)direction;
+  return direction;
 }
 
 // Values corresponding to a R_vane=9929 and VCC=3.3V. Must be calibrated. 
-uint16_t SEN15901::mapping(const long r){
-  uint16_t result = 0;
+uint8_t SEN15901::mapping(const long r){
+  uint8_t result = 0;
   
   switch(r) {
   case 0 ... 364:
     // R = 279
-    result = 113;
+    result = 5;
     break;
   case 365 ... 494:
     // R = 448
-    result = 68;
+    result = 3;
     break;
   case 495 ... 714:
     // R = 540
-    result = 90;
+    result = 4;
     break;
   case 715 ... 1219:
     // R = 887
-    result = 158;
+    result = 7;
     break;
   case 1220 ... 1925:
     // R = 1.55k
-    result = 135;
+    result = 6;
     break;
   case 1926 ... 2600:
     // R = 2.3k
-    result = 203;
+    result = 9;
     break;
   case 2601 ... 3900:
     // R = 2.9k
-    result = 180;
+    result = 8;
     break;
   case 3901 ... 5500:
     // R = 4.9k
-    result = 23;
+    result = 1;
     break;
   case 5501 ... 7850:
     // R = 6.1k
-    result = 45;
+    result = 2;
     break;
   case 7851 ... 10100:
     // R = 9.6k
-    result = 248;
+    result = 11;
     break;
   case 10101 ... 12000:
     // R = 10.6k
-    result = 225;
+    result = 10;
     break;
   case 12001 ... 15450:
     // R = 13.4
-    result = 338;
+    result = 15;
     break;
   case 15451 ... 18900:
     // R = 17.5
@@ -120,23 +118,23 @@ uint16_t SEN15901::mapping(const long r){
     break;
   case 18901 ... 22750:
     // R = 20.3k
-    result = 293;
+    result = 13;
     break;
   case 22751 ... 28600:
     // R = 25.2k
-    result = 315;
+    result = 14;
     break;
   case 28601 ... 60000:
     // R = 32k
-    result = 270;
+    result = 12;
     break;
   }
 
   return result;
 }
 
-float SEN15901::get_rain(){
-  float interrupt = interrupt_counter*0.2794;
+uint32_t SEN15901::get_rain(){
+  uint32_t interrupt = interrupt_counter;
   interrupt_counter = 0;
   return interrupt;  
 }

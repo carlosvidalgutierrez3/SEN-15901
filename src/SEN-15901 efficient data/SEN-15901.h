@@ -4,7 +4,9 @@
  *****************************************************************************/
 /**
  * @file SEN-15901.h
- * @brief Library for SEN-15901 weather station kit
+ * @brief Library for SEN-15901 weather station kit. This version of the library 
+ * returns the sensor data in smaller formats, so that the data can be transmitted
+ * in a more efficient way, and decoded in the server/receiver. See function descriptions.
  */
 
 #ifndef __SEN15901_H__
@@ -29,25 +31,25 @@ public:
     void begin();
 
     /**
-     * @return Wind direction in degrees (N=0, E=45)
+     * @return Wind direction between 0 and 15 (times 22.5 to get angle)
      */
-    uint16_t get_wind_direction();
+    uint8_t get_wind_direction();
 
     /**
-     * @return Wind speed in km/h
+     * @return Multiply times 1.2 to get speed in kmh
      */
-    float get_wind_speed();
+    uint8_t get_wind_speed();
 
     /**
-     * @return Returns mm of rain since last call.
+     * @return Returns spoon tips of rain since last call. Each spoon tip is 0.2794 mm of rain
      */
-    float get_rain();
+    uint16_t get_rain();
 
 private:
     // Wind vane
     uint8_t vane_pin;
     uint16_t vane_resistor;
-    uint16_t mapping(const long r); // Map of the resistor values of the wind vane to the angle
+    uint8_t mapping(const long r); // Map of the resistor values of the wind vane to the angle
     
     // Anemomenter
     uint8_t anemometer_pin;
