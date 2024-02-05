@@ -4,7 +4,7 @@ Use this library to measure rainfall, wind direction and wind speed with the SEN
 
 ## Circuit
 Example circuit with an Adafruit Feather M0 board:
-![alt text](image.png)
+![alt text](documents/image.png)
 
 ## Calibration
 The wind vane requires precise calibration to get the correct values:
