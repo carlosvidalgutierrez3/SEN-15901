@@ -8,7 +8,7 @@ Example circuit with an Adafruit Feather M0 board:
 
 ## Calibration
 The wind vane requires precise calibration to get the correct values:
-1) Measure the exact value of your resistor and assign it to **VANE_RESISTOR**. If your powering the sensor with 3.3V, this might be enought. If not, follow calibration step 2.
+1) Measure the exact value of your resistor and assign it to **VANE_RESISTOR**. If you're powering the sensor with 3.3V, this might be enought. If not, follow calibration step 2.
 
 2) - Upload a program to the board that reads the analog value of your vane (A0 in the example circuit)
     - Using Ohms Law, measure the resistor value for each direction of the vane. 
